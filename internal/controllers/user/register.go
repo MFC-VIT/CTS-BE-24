@@ -51,7 +51,9 @@ func (h *Handler) HandleRegister(c *fiber.Ctx) error{
 		return utils.WriteError(c, fiber.StatusInternalServerError, err)
 	}
 
-	return utils.WriteJSON(c, fiber.StatusCreated, "Success")
-	 
+	if err := h.store.SeedQuestionsForUser(c.Context(),user.ID); err != nil {
+		return utils.WriteError(c, fiber.StatusInternalServerError, fmt.Errorf("failed to seed questions for user: %v", err))
+	}
 
+	return utils.WriteJSON(c, fiber.StatusCreated, "Success")
 }

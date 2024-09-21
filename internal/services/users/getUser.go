@@ -17,6 +17,7 @@ func (s *Store) GetUserByID(id primitive.ObjectID) (*models.User, error) {
 	return &user, nil
 }
 
+
 func (s *Store) GetUserByUserName(UserName string) (*models.User, error) {
 	var user models.User
 	err := s.collection.FindOne(context.TODO(), bson.M{"username": UserName}).Decode(&user)

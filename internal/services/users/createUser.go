@@ -2,6 +2,7 @@ package users
 
 import (
 	"C2S/internal/models"
+	seed "C2S/internal/seeders"
 	"context"
 	"time"
 
@@ -16,5 +17,10 @@ func (s *Store) CreateUser(user *models.User) error {
 		return err
 	}
 	return nil
+}
+
+func (s *Store) SeedQuestionsForUser(ctx context.Context,userID primitive.ObjectID) error {
+	yamlFile := "internal/seeders/questions.yaml" 
+	return seed.SeedQuestions(ctx, s.db, userID, yamlFile) 
 }
 

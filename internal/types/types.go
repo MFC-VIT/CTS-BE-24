@@ -2,6 +2,7 @@ package types
 
 import (
 	"C2S/internal/models"
+	"context"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -20,4 +21,5 @@ type UserStore interface {
 	GetUserByUserName(userName string) (*models.User, error)
 	GetUserByID(id primitive.ObjectID) (*models.User, error)
 	CreateUser(user *models.User) error
+	SeedQuestionsForUser(ctx context.Context,userID primitive.ObjectID) error
 }
