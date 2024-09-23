@@ -17,9 +17,24 @@ type LoginUserPayload struct {
 	Password string `json:"password" validate:"required"`
 }
 
+type AnswerPayload struct {
+	Question string `json:"question" validate:"required"`
+	Room     string `json:"room" validate:"required"`
+	Answer   string `json:"answer" validate:"required"`
+}
+
 type UserStore interface {
 	GetUserByUserName(userName string) (*models.User, error)
 	GetUserByID(id primitive.ObjectID) (*models.User, error)
 	CreateUser(user *models.User) error
 	SeedQuestionsForUser(ctx context.Context,userID primitive.ObjectID) error
+}
+type RoomStore interface {
+	EnterRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error
+	EscapeRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error
+}
+
+type QuestionStore interface {
+	GetNextQuestion(ctx context.Context, userID primitive.ObjectID) (models.Question, error)
+	QuestionAnswered(ctx context.Context, userID primitive.ObjectID, question models.Question) error
 }

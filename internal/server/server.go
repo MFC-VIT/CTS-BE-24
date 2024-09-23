@@ -1,8 +1,12 @@
 package server
 
 import (
+	"C2S/internal/controllers/question"
+	room "C2S/internal/controllers/rooms"
 	"C2S/internal/controllers/user"
 	"C2S/internal/routes"
+	"C2S/internal/services/questions"
+	rooms "C2S/internal/services/rooms"
 	"C2S/internal/services/users"
 
 	"github.com/gofiber/fiber/v2"
@@ -31,10 +35,22 @@ func New(app *fiber.App, client *mongo.Client, db *mongo.Database) *FiberServer 
 func (s *FiberServer) RegisterFiberRoutes() {
 	api := s.App.Group("/api/v1")
 
-	userHandler := user.NewHandler(users.NewUserStore(s.db))
+	userStore := users.NewUserStore(s.db)
+	roomStore := rooms.NewRoomStore(s.db)
+	questionStore := questions.NewQuestionStore(s.db)
+
+	userHandler := user.NewHandler(userStore)
 	userRoutes := routes.NewUserRoutes(userHandler)
 	userRoutes.RegisterRoutes(api)
 
 	healthRoutes := routes.NewHealthRoutes()
 	healthRoutes.RegisterRoutes(api)
+
+	roomHandler := room.NewHandler(userStore, roomStore) 
+	roomRoutes := routes.NewRoomRoutes(roomHandler)
+	roomRoutes.RegisterRoutes(api)
+
+	questionHandler := question.NewHandler(questionStore)
+	questionRoutes := routes.NewQuestionRoutes(questionHandler)
+	questionRoutes.RegisterRoutes(api)
 }

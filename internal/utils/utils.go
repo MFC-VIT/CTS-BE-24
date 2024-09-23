@@ -1,10 +1,13 @@
 package utils
 
 import (
+	"C2S/internal/models"
 	"fmt"
+	"os"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"gopkg.in/yaml.v2"
 )
 
 var Validate = validator.New()
@@ -37,4 +40,23 @@ func GetTokenFromRequest(c *fiber.Ctx) string {
 		return tokenQuery
 	}
 	return ""
+}
+
+type AnswerData struct {
+	Questions []models.Question `yaml:"questions"`
+}
+
+func LoadAnswers(filePath string) (AnswerData,error){
+	var data AnswerData
+
+	file, err := os.ReadFile(filePath)
+
+	if err !=nil {
+		return data, fmt.Errorf("error reading file; %v",err)
+	}
+
+	if err := yaml.Unmarshal(file,&data);err!=nil{
+		return data, fmt.Errorf("error unmarshalling yaml: %v",err)
+	}
+	return data,nil
 }

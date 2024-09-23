@@ -113,5 +113,22 @@ func SeedQuestions(ctx context.Context, db *mongo.Database, userID primitive.Obj
 	}
 
 	fmt.Println("Seeded questions successfully!")
+	
+	roomCollection := db.Collection(os.Getenv("MONGO_ROOMS_COLLECTION"))
+
+	newRoom := models.Rooms{
+		UserName: userName,
+		ID:       primitive.NewObjectID(),
+		UserID:   userID,
+		IsRoomsDone:     models.RoomsDone{},
+		IsRoomsGiveUp:   models.RoomsGiveUp{},
+	}
+
+	_, err = roomCollection.InsertOne(ctx, newRoom)
+	if err != nil {
+		return fmt.Errorf("failed to initialize rooms for user: %v", err)
+	}
+
+	fmt.Println("Initialized rooms successfully!")
 	return nil
 }
