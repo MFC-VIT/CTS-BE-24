@@ -3,7 +3,9 @@ package utils
 import (
 	"C2S/internal/models"
 	"fmt"
+	"log"
 	"os"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -30,17 +32,24 @@ func WriteError(r *fiber.Ctx, status int, err error) error {
 }
 
 func GetTokenFromRequest(c *fiber.Ctx) string {
-	tokenAuth := c.Get("Authorization")
-	tokenQuery := c.Query("token")
+	authHeader := c.Get("Authorization")
+	log.Printf("Authorization Header: %s", authHeader)
 
-	if tokenAuth != "" {
-		return tokenAuth
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		log.Println("User is not authorized or token missing")
+		return ""
 	}
-	if tokenQuery != "" {
-		return tokenQuery
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 {
+		log.Println("Authorization header format must be Bearer {token}")
+		return ""
 	}
-	return ""
+
+	log.Printf("Token Part: %s", parts[1])
+	return parts[1]
 }
+
 
 type AnswerData struct {
 	Questions []models.Question `yaml:"questions"`

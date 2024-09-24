@@ -47,10 +47,10 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	healthRoutes.RegisterRoutes(api)
 
 	roomHandler := room.NewHandler(userStore, roomStore) 
-	roomRoutes := routes.NewRoomRoutes(roomHandler)
+	roomRoutes := routes.NewRoomRoutes(roomHandler,userStore)
 	roomRoutes.RegisterRoutes(api)
 
 	questionHandler := question.NewHandler(questionStore)
-	questionRoutes := routes.NewQuestionRoutes(questionHandler)
+	questionRoutes := routes.NewQuestionRoutes(questionHandler,userStore)
 	questionRoutes.RegisterRoutes(api)
 }
