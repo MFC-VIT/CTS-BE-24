@@ -5,6 +5,7 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Question struct {
 	Question string `bson:"question"`
+	QuestionId int `bson:"question_id"`
 	Answer   string `bson:"answer"`
 	Room     string `bson:"room"`
 	Answered string   `bson:"answered"` 

@@ -20,7 +20,7 @@ func (s *Store) CreateUser(user *models.User) error {
 }
 
 func (s *Store) SeedQuestionsForUser(ctx context.Context,userID primitive.ObjectID) error {
-	yamlFile := "internal/seeders/questions.yaml" 
+	yamlFile := "internal/files/questions.yaml" 
 	return seed.SeedQuestions(ctx, s.db, userID, yamlFile) 
 }
 

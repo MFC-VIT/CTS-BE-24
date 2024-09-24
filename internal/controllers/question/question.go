@@ -1,6 +1,7 @@
 package question
 
 import (
+	"C2S/internal/middleware"
 	"C2S/internal/models"
 	"C2S/internal/types"
 	"C2S/internal/utils"
@@ -21,6 +22,11 @@ func NewHandler(store types.QuestionStore) *Handler {
 
 func (h *Handler) HandleGetQuestion(c *fiber.Ctx) error {
 	userIDParam := c.Params("userID")
+	userIDFromToken := c.Locals(middleware.UserKey).(string)
+
+	if userIDParam != userIDFromToken {
+		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
+	}
 	userID, err := primitive.ObjectIDFromHex(userIDParam)
 	if err != nil {
 		return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid userID format"))
@@ -44,6 +50,11 @@ func (h *Handler) HandleGetQuestion(c *fiber.Ctx) error {
 func (h *Handler) HandlePostAnswer(c *fiber.Ctx) error {
 		var payload types.AnswerPayload
 		userIDParam := c.Params("userID")
+		userIDFromToken := c.Locals(middleware.UserKey).(string)
+
+		if userIDParam != userIDFromToken {
+			return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
+		}
 		userID, err := primitive.ObjectIDFromHex(userIDParam)
 		if err != nil {
 			return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid userID format"))
@@ -55,6 +66,7 @@ func (h *Handler) HandlePostAnswer(c *fiber.Ctx) error {
 		fmt.Printf("Received request to submit answer for user ID: %s, Question: %s\n", userID.Hex(), payload.Question)
 		questionData := models.Question{
 			Room:     payload.Room,
+			QuestionId: payload.QuestionId,
 			Question: payload.Question,
 			Answer:   payload.Answer,
 		}

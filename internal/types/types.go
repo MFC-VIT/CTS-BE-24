@@ -18,6 +18,7 @@ type LoginUserPayload struct {
 }
 
 type AnswerPayload struct {
+	QuestionId int `json:"questionId" validate:"required"`
 	Question string `json:"question" validate:"required"`
 	Room     string `json:"room" validate:"required"`
 	Answer   string `json:"answer" validate:"required"`

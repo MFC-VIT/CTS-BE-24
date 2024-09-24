@@ -66,7 +66,7 @@ func WithJWTAuth(store types.UserStore) fiber.Handler {
 			return permissionDenied(c)
 		}
 
-		c.Locals(UserKey, u.ID.String())
+		c.Locals(UserKey, u.ID.Hex())
 
 
 		return c.Next()

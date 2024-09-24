@@ -5,6 +5,7 @@ import (
 	"C2S/internal/utils"
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -130,13 +131,18 @@ func (qs *QuestionControllerStore) markRoomAsDone(ctx context.Context, userID pr
 }
 
 func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID primitive.ObjectID, question models.Question) error {
+	log.Println("Starting QuestionAnswered function")
+
 	var questionData models.Questions
 	err := qs.questionsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&questionData)
 	if err != nil {
+		log.Printf("Failed to fetch questions for user %v: %v\n", userID, err)
 		return fmt.Errorf("failed to fetch questions for user: %v", err)
 	}
 
 	var questions []models.Question
+	log.Printf("Room: %s\n", question.Room)
+
 	switch question.Room {
 	case "A":
 		questions = questionData.RoomA.Questions
@@ -147,36 +153,43 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 	case "D":
 		questions = questionData.RoomD.Questions
 	default:
+		log.Printf("Unknown room: %s\n", question.Room)
 		return fmt.Errorf("unknown room: %s", question.Room)
 	}
 
-	answerFilePath := "internal/seeders/answer.yaml" 
+	answerFilePath := "internal/files/answer.yaml"
+	log.Println("Loading answers from file:", answerFilePath)
 	answerData, err := utils.LoadAnswers(answerFilePath)
 	if err != nil {
+		log.Printf("Failed to load answers: %v\n", err)
 		return fmt.Errorf("failed to load answers: %v", err)
 	}
 
 	var correctAnswer string
 	for _, ansQuestion := range answerData.Questions {
-		if ansQuestion.Question == question.Question && ansQuestion.Room == question.Room {
+		if ansQuestion.QuestionId == question.QuestionId && ansQuestion.Room == question.Room {
 			correctAnswer = ansQuestion.Answer
 			break
 		}
 	}
 
 	if correctAnswer == "" {
+		log.Printf("Question ID %d not found in answer file for room %s\n", question.QuestionId, question.Room)
 		return fmt.Errorf("question not found in answer file")
 	}
 
 	if question.Answer != correctAnswer {
+		log.Printf("Incorrect answer: got %s, expected %s\n", question.Answer, correctAnswer)
 		return fmt.Errorf("incorrect answer")
 	}
 
 	for i, q := range questions {
-		if q.Question == question.Question && q.Answered == "false" {
+		if q.QuestionId == question.QuestionId && q.Answered == "false" {
+			log.Printf("Marking question %v as answered for user %v\n", q.QuestionId, userID)
+
 			filter := bson.M{
-				"user_id":userID,
-				fmt.Sprintf("room_%s.questions.%d.question", strings.ToLower(question.Room),i): q.Question,
+				"user_id": userID,
+				fmt.Sprintf("room_%s.questions.%d.question", strings.ToLower(question.Room), i): q.Question,
 			}
 			update := bson.M{
 				"$set": bson.M{
@@ -186,11 +199,12 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 
 			_, err := qs.questionsCollection.UpdateOne(ctx, filter, update)
 			if err != nil {
+				log.Printf("Failed to mark question as answered: %v\n", err)
 				return fmt.Errorf("failed to mark question as answered: %v", err)
 			}
-			return nil 
+			return nil
 		}
-		if i == 3{
+		if i == 3 {
 			allAnswered := true
 			for _, q := range questions {
 				if q.Answered == "false" {
@@ -200,8 +214,10 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 			}
 
 			if allAnswered {
+				log.Printf("All questions answered in room %s for user %v\n", question.Room, userID)
 				err = qs.markRoomAsDone(ctx, userID, question.Room, qs.roomsCollection)
 				if err != nil {
+					log.Printf("Failed to update room status: %v\n", err)
 					return fmt.Errorf("failed to update room status: %v", err)
 				}
 
@@ -210,14 +226,16 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 						"room_entered": "",
 					},
 				}
-			
+
 				_, err = qs.usersCollection.UpdateOne(ctx, bson.M{"_id": userID}, updateUser)
 				if err != nil {
+					log.Printf("Failed to clear RoomEntered field for user %v: %v\n", userID, err)
 					return fmt.Errorf("failed to clear RoomEntered field for user: %v", err)
 				}
 			}
 		}
 	}
+	log.Println("Question already answered or not found")
 	return fmt.Errorf("question already answered or not found")
 }
 

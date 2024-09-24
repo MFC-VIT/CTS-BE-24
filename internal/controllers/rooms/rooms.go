@@ -1,6 +1,7 @@
 package rooms
 
 import (
+	"C2S/internal/middleware"
 	"C2S/internal/types"
 	"C2S/internal/utils"
 	"fmt"
@@ -20,6 +21,13 @@ func NewHandler(store types.UserStore, roomcontrollerstore types.RoomStore) *Han
 
 func (h *Handler) HandleEnterRoom(c *fiber.Ctx) error {
 	userIDParam := c.Params("userID")
+
+	userIDFromToken := c.Locals(middleware.UserKey).(string)
+
+	if userIDParam != userIDFromToken {
+		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
+	}
+
 	userID, err := primitive.ObjectIDFromHex(userIDParam)
 	if err != nil {
 		return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid userid format"))
@@ -45,6 +53,12 @@ func (h *Handler) HandleEnterRoom(c *fiber.Ctx) error {
 
 func (h *Handler) HandleEscapeRoom(c *fiber.Ctx) error {
 	userIDParam := c.Params("userID")
+	
+	userIDFromToken := c.Locals(middleware.UserKey).(string)
+
+	if userIDParam != userIDFromToken {
+		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
+	}
 	userID, err := primitive.ObjectIDFromHex(userIDParam)
 	if err != nil {
 		return utils.WriteError(c, fiber.StatusBadRequest,  fmt.Errorf("invalid userid format"))

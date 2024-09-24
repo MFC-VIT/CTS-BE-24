@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"C2S/internal/models"
 	"fmt"
 	"log"
 	"os"
@@ -50,9 +49,16 @@ func GetTokenFromRequest(c *fiber.Ctx) string {
 	return parts[1]
 }
 
+type Question struct {
+	Question   string `yaml:"question"`   
+	QuestionId int    `yaml:"question_id"`
+	Answer     string `yaml:"answer"`     
+	Room       string `yaml:"room"`       
+	Answered   bool   `yaml:"answered"`    
+}
 
 type AnswerData struct {
-	Questions []models.Question `yaml:"questions"`
+	Questions []Question `yaml:"questions"`
 }
 
 func LoadAnswers(filePath string) (AnswerData,error){
@@ -67,5 +73,10 @@ func LoadAnswers(filePath string) (AnswerData,error){
 	if err := yaml.Unmarshal(file,&data);err!=nil{
 		return data, fmt.Errorf("error unmarshalling yaml: %v",err)
 	}
+
+	for _, q := range data.Questions {
+		log.Printf("Loaded answer from file - Question ID: %d, Question: %v, Answer: %s", q.QuestionId,q.Question, q.Answer)
+	}
+
 	return data,nil
 }
