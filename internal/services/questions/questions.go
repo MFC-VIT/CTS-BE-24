@@ -5,20 +5,18 @@ import (
 	"C2S/internal/utils"
 	"context"
 	"fmt"
-	"os"
 	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID primitive.ObjectID) (models.Question, error) {
-	usersCollection := qs.db.Collection(os.Getenv("MONGO_USER_COLLECTION"))
-	questionsCollection := qs.db.Collection(os.Getenv("MONGO_QUESTIONS_COLLECTION"))
-
+	
 	var user models.User
 
-	err := usersCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
+	err := qs.usersCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
 	if err != nil {
 		return models.Question{}, fmt.Errorf("user not found: %v", err)
 	}
@@ -28,7 +26,7 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 	}
 
 	var questionData models.Questions
-	err = questionsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&questionData)
+	err = qs.questionsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&questionData)
 	if err != nil {
 		return models.Question{}, fmt.Errorf("failed to fetch questions: %v", err)
 	}
@@ -53,14 +51,61 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 		}
 	}
 
+	err = qs.markRoomAsDone(ctx, userID, user.RoomEntered,qs.roomsCollection)
+	if err != nil {
+		return models.Question{}, fmt.Errorf("failed to update room status: %v", err)
+	}
+
 	return models.Question{}, fmt.Errorf("all questions answered in room: %s", user.RoomEntered)
 }
 
-func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID primitive.ObjectID, question models.Question) error {
-	questionsCollection := qs.db.Collection(os.Getenv("MONGO_QUESTIONS_COLLECTION"))
 
+func (qs *QuestionControllerStore) markRoomAsDone(ctx context.Context, userID primitive.ObjectID, room string, roomsCollection *mongo.Collection) error {
+	var roomStatus models.Rooms
+	err := roomsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&roomStatus)
+	if err != nil {
+		return fmt.Errorf("failed to fetch room status for user: %v", err)
+	}
+
+	switch room {
+	case "A":
+		if roomStatus.IsRoomsDone.RoomA {
+			return fmt.Errorf("room A is already marked as done")
+		}
+	case "B":
+		if roomStatus.IsRoomsDone.RoomB {
+			return fmt.Errorf("room B is already marked as done")
+		}
+	case "C":
+		if roomStatus.IsRoomsDone.RoomC {
+			return fmt.Errorf("room C is already marked as done")
+		}
+	case "D":
+		if roomStatus.IsRoomsDone.RoomD {
+			return fmt.Errorf("room D is already marked as done")
+		}
+	default:
+		return fmt.Errorf("unknown room: %s", room)
+	}
+
+	filter := bson.M{"user_id": userID}
+	update := bson.M{
+		"$set": bson.M{
+			fmt.Sprintf("is_rooms_done.room_%s", strings.ToLower(room)): true,
+		},
+	}
+
+	_, err = roomsCollection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return fmt.Errorf("failed to update room status in rooms collection: %v", err)
+	}
+
+	return nil
+}
+
+func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID primitive.ObjectID, question models.Question) error {
 	var questionData models.Questions
-	err := questionsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&questionData)
+	err := qs.questionsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&questionData)
 	if err != nil {
 		return fmt.Errorf("failed to fetch questions for user: %v", err)
 	}
@@ -113,15 +158,40 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 				},
 			}
 
-			_, err := questionsCollection.UpdateOne(ctx, filter, update)
+			_, err := qs.questionsCollection.UpdateOne(ctx, filter, update)
 			if err != nil {
 				return fmt.Errorf("failed to mark question as answered: %v", err)
 			}
-
 			return nil 
 		}
-	}
+		if i == 3{
+			allAnswered := true
+			for _, q := range questions {
+				if q.Answered == "false" {
+					allAnswered = false
+					break
+				}
+			}
 
+			if allAnswered {
+				err = qs.markRoomAsDone(ctx, userID, question.Room, qs.roomsCollection)
+				if err != nil {
+					return fmt.Errorf("failed to update room status: %v", err)
+				}
+
+				updateUser := bson.M{
+					"$set": bson.M{
+						"room_entered": "",
+					},
+				}
+			
+				_, err = qs.usersCollection.UpdateOne(ctx, bson.M{"_id": userID}, updateUser)
+				if err != nil {
+					return fmt.Errorf("failed to clear RoomEntered field for user: %v", err)
+				}
+			}
+		}
+	}
 	return fmt.Errorf("question already answered or not found")
 }
 
