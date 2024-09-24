@@ -45,6 +45,32 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 		return models.Question{}, fmt.Errorf("unknown room: %s", user.RoomEntered)
 	}
 
+	allAnswered := true
+	for _, question := range questions {
+		if question.Answered == "false" {
+			allAnswered = false
+			break
+		}
+	}
+
+	if allAnswered {
+		err = qs.markRoomAsDone(ctx, userID, user.RoomEntered, qs.roomsCollection)
+		if err != nil {
+			return models.Question{}, fmt.Errorf("failed to update room status: %v", err)
+		}
+
+		switch user.RoomEntered {
+		case "A":
+			return models.Question{}, fmt.Errorf("clue: A")
+		case "B":
+			return models.Question{}, fmt.Errorf("clue: B")
+		case "C":
+			return models.Question{}, fmt.Errorf("clue: C")
+		case "D":
+			return models.Question{}, fmt.Errorf("clue: D")
+		}
+	}
+
 	for _, question := range questions {
 		if question.Answered == "false" {
 			return question, nil
@@ -70,19 +96,19 @@ func (qs *QuestionControllerStore) markRoomAsDone(ctx context.Context, userID pr
 	switch room {
 	case "A":
 		if roomStatus.IsRoomsDone.RoomA {
-			return fmt.Errorf("room A is already marked as done")
+			return nil
 		}
 	case "B":
 		if roomStatus.IsRoomsDone.RoomB {
-			return fmt.Errorf("room B is already marked as done")
+			return nil
 		}
 	case "C":
 		if roomStatus.IsRoomsDone.RoomC {
-			return fmt.Errorf("room C is already marked as done")
+			return nil
 		}
 	case "D":
 		if roomStatus.IsRoomsDone.RoomD {
-			return fmt.Errorf("room D is already marked as done")
+			return nil
 		}
 	default:
 		return fmt.Errorf("unknown room: %s", room)

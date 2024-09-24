@@ -72,20 +72,43 @@ func (rc *RoomControllerStore) EscapeRoom(ctx context.Context, userID primitive.
 
 	roomDoneField := fmt.Sprintf("is_rooms_done.room_%s", strings.ToLower(roomEntered))
 	roomGiveUpField := fmt.Sprintf("is_rooms_giveup.room_%s", strings.ToLower(roomEntered))
+
+	var roomStatus models.Rooms
+	err = rc.roomsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&roomStatus)
+	if err != nil {
+		return fmt.Errorf("failed to fetch room status: %v", err)
+	}
+
+	var roomIsDone bool
+	switch strings.ToUpper(roomEntered) {
+	case "A":
+		roomIsDone = roomStatus.IsRoomsDone.RoomA
+	case "B":
+		roomIsDone = roomStatus.IsRoomsDone.RoomB
+	case "C":
+		roomIsDone = roomStatus.IsRoomsDone.RoomC
+	case "D":
+		roomIsDone = roomStatus.IsRoomsDone.RoomD
+	default:
+		return fmt.Errorf("unknown room: %s", roomEntered)
+	}
+
+	if !roomIsDone {
+		if err := rc.CheckUnansweredQuestionsAndUpdateScore(ctx, userID, roomEntered); err != nil {
+			return err
+		}
+			
 	update := bson.M{"$set": bson.M{roomGiveUpField: true,roomDoneField:true}}
 
 	_, err = rc.roomsCollection.UpdateOne(ctx, bson.M{"user_id": userID}, update)
 	if err != nil {
 		return fmt.Errorf("failed to update room give up: %v", err)
 	}
+	}
 
 	_, err = rc.usersCollection.UpdateOne(ctx, bson.M{"_id": userID}, bson.M{"$set": bson.M{"room_entered": ""}})
 	if err != nil {
 		return fmt.Errorf("failed to update user's room status: %v", err)
-	}
-
-	if err := rc.CheckUnansweredQuestionsAndUpdateScore(ctx, userID, roomEntered); err != nil {
-		return err
 	}
 
 	fmt.Printf("User %s has successfully escaped room %s. Room marked as done and giveup.\n", userID.Hex(), roomEntered)
