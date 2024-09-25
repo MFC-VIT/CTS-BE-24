@@ -85,7 +85,7 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 
 	return models.Question{}, fmt.Errorf("all questions answered in room: %s", user.RoomEntered)
 }
-
+var count int = 0
 
 func (qs *QuestionControllerStore) markRoomAsDone(ctx context.Context, userID primitive.ObjectID, room string, roomsCollection *mongo.Collection) error {
 	var roomStatus models.Rooms
@@ -158,7 +158,7 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 	}
 
 	answerFilePath := "internal/files/answer.yaml"
-	log.Println("Loading answers from file:", answerFilePath)
+	//log.Println("Loading answers from file:", answerFilePath)
 	answerData, err := utils.LoadAnswers(answerFilePath)
 	if err != nil {
 		log.Printf("Failed to load answers: %v\n", err)
@@ -177,9 +177,14 @@ func (qs *QuestionControllerStore) QuestionAnswered(ctx context.Context, userID 
 		log.Printf("Question ID %d not found in answer file for room %s\n", question.QuestionId, question.Room)
 		return fmt.Errorf("question not found in answer file")
 	}
-
 	if question.Answer != correctAnswer {
-		log.Printf("Incorrect answer: got %s, expected %s\n", question.Answer, correctAnswer)
+		count++
+		if(count == 5){
+			log.Printf("Max answers Reached")
+			return fmt.Errorf("max answer reached")
+		}
+		log.Printf("Incorrect Count is: %d",count)
+		log.Printf("Incorrect answer: ")
 		return fmt.Errorf("incorrect answer")
 	}
 

@@ -59,13 +59,14 @@ func (rc *RoomControllerStore) EnterRoom(ctx context.Context, userID primitive.O
 }
 
 func (rc *RoomControllerStore) EscapeRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error {
-
+	usersCollection := rc.db.Collection(os.Getenv("MONGO_USER_COLLECTION"))
 	var user models.User
-	err := rc.usersCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
+	err := usersCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
+	log.Println(user.RoomEntered)
+	log.Println(roomEntered)
 	if err != nil {
 		return fmt.Errorf("user not found: %v", err)
 	}
-
 	if user.RoomEntered != roomEntered {
 		return fmt.Errorf("user is not in room: %s", roomEntered)
 	}
