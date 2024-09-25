@@ -62,3 +62,30 @@ func (h *Handler) HandleLogin(c *fiber.Ctx) error{
 	return c.Status(fiber.StatusOK).JSON(response)
 
 }
+
+func (h *Handler) HandleGetRandomLocation(c *fiber.Ctx) error {
+	userIDParam := c.Params("userID") 
+	userID, err := primitive.ObjectIDFromHex(userIDParam)
+	if err != nil {
+		return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid user ID: %v", err))
+	}
+
+	locationsFilePath := "internal/files/location.yaml" 
+	
+	randomLocation, err := h.store.GetRandomLocation(c.Context(), userID, locationsFilePath)
+	if err != nil {
+		return utils.WriteError(c, fiber.StatusInternalServerError, fmt.Errorf("failed to get random location: %v", err))
+	}
+
+	if randomLocation == "" {
+		return utils.WriteError(c, fiber.StatusOK, fmt.Errorf("solve all rooms to get location"))
+	}
+
+	response := struct {
+		Location string `json:"location"`
+	}{
+		Location: randomLocation,
+	}
+
+	return c.Status(fiber.StatusOK).JSON(response)
+}

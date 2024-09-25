@@ -3,8 +3,10 @@ package utils
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 
 	//"strings"
 
@@ -64,6 +66,14 @@ type AnswerData struct {
 	Questions []Question `yaml:"questions"`
 }
 
+type LocationData struct {
+	Locations []Location `yaml:"locations"`
+}
+
+type Location struct {
+	Location string `yaml:"location"`
+}
+
 func LoadAnswers(filePath string) (AnswerData,error){
 	var data AnswerData
 
@@ -82,4 +92,38 @@ func LoadAnswers(filePath string) (AnswerData,error){
 	}
 
 	return data,nil
+}
+
+func LoadLocations(filePath string) ([]string, error) {
+	var locData LocationData
+
+	yamlFile, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("error reading YAML file: %v", err)
+	}
+
+	err = yaml.Unmarshal(yamlFile, &locData)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling YAML file: %v", err)
+	}
+
+	var locations []string
+	for _, loc := range locData.Locations {
+		locations = append(locations, loc.Location)
+	}
+
+	return locations, nil
+}
+
+
+
+func GetRandomLocation(locations []string) string {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r.Shuffle(len(locations), func(i, j int) {
+		locations[i], locations[j] = locations[j], locations[i]
+	})
+	if len(locations) > 0 {
+		return locations[0]
+	}
+	return "" 
 }

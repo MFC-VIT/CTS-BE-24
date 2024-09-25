@@ -12,7 +12,7 @@ import (
 func (s *Store) CreateUser(user *models.User) error {
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
-	_, err := s.collection.InsertOne(context.TODO(), user)
+	_, err := s.usersCollection.InsertOne(context.TODO(), user)
 	if err != nil {
 		return err
 	}

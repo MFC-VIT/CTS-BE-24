@@ -14,5 +14,6 @@ type User struct {
 	IsAdmin   bool               `bson:"is_admin"`
 	IsQuestionSeeded bool 		 `bson:"is_seeded"`
 	RoomEntered     string      `bson:"room_entered"`
+	Location        string      `bson:"location"`
 	Score            int          `bson:"score"`
 }

@@ -41,7 +41,7 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	adminStore := users.NewUserStore(s.db)
 
 	userHandler := user.NewHandler(userStore)
-	userRoutes := routes.NewUserRoutes(userHandler)
+	userRoutes := routes.NewUserRoutes(userHandler,userStore)
 	userRoutes.RegisterRoutes(api)
 
 	healthRoutes := routes.NewHealthRoutes()

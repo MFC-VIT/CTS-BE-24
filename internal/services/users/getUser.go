@@ -2,19 +2,24 @@ package users
 
 import (
 	"C2S/internal/models"
+	"C2S/internal/utils"
 	"context"
+	"fmt"
 	"log"
+	"strings"
+	"sync"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	//"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (s *Store) GetUserByID(id primitive.ObjectID) (*models.User, error) {
 	var user models.User
-	err := s.collection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&user)
+	err := s.usersCollection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&user)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +29,7 @@ func (s *Store) GetUserByID(id primitive.ObjectID) (*models.User, error) {
 
 func (s *Store) GetUserByUserName(UserName string) (*models.User, error) {
 	var user models.User
-	err := s.collection.FindOne(context.TODO(), bson.M{"username": UserName}).Decode(&user)
+	err := s.usersCollection.FindOne(context.TODO(), bson.M{"username": UserName}).Decode(&user)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +84,7 @@ func (r *Store) GetUserByUserNameHandler(c *fiber.Ctx) error {
         },
     }
 
-    cursor, err := r.collection.Aggregate(c.Context(), pipeline)
+    cursor, err := r.usersCollection.Aggregate(c.Context(), pipeline)
     if err != nil {
         return c.Status(fiber.StatusInternalServerError).SendString("Failed to fetch user data")
     }
@@ -136,7 +141,7 @@ func (s * Store) GetAllUsers(c* fiber.Ctx) error{
 			},
 		},
 	}
-	cursor, err := s.collection.Aggregate(c.Context(), pipeline)
+	cursor, err := s.usersCollection.Aggregate(c.Context(), pipeline)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Failed to get users")
 	}
@@ -232,4 +237,91 @@ func (s* Store) UpdateScore(c *fiber.Ctx) error{
 	}
 
 	return c.Status(200).SendString("User updated")
+}
+func (s *Store) GetRandomLocation(ctx context.Context, userID primitive.ObjectID, locationsFilePath string) (string, error) {
+	roomStatusArray, err := s.collectUserRoomsStatus(ctx, userID) 
+	if err != nil {
+		return "", fmt.Errorf("failed to collect user rooms status: %v", err)
+	}
+
+	allRoomsDone := true
+	for _, status := range roomStatusArray {
+		if !strings.HasSuffix(status, "D") {
+			allRoomsDone = false
+			break
+		}
+	}
+
+	if allRoomsDone {
+		locations, err := utils.LoadLocations(locationsFilePath)
+		if err != nil {
+			return "", fmt.Errorf("failed to load locations: %v", err)
+		}
+		randomLocation := utils.GetRandomLocation(locations)
+		s.Location = randomLocation
+		err = s.UpdateUserLocation(ctx, userID, randomLocation) 
+		if err != nil {
+			return "", fmt.Errorf("failed to update user location: %v", err)
+		}
+
+		return randomLocation, nil
+	}
+
+	return "", nil 
+}
+
+
+func (s *Store) UpdateUserLocation(ctx context.Context, userID primitive.ObjectID, location string) error {
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$set": bson.M{"location": location}}
+
+	_, err := s.usersCollection.UpdateOne(ctx, filter, update, options.Update().SetUpsert(true))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Store) collectUserRoomsStatus(ctx context.Context, userID primitive.ObjectID) ([]string, error) {
+
+	var roomStatus models.Rooms
+	err := s.roomsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&roomStatus)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch room status: %v", err)
+	}
+	roomStatusChan := make(chan string, 4)
+
+	var wg sync.WaitGroup
+
+	checkRoomStatus := func(roomName string, done bool, giveUp bool) {
+		defer wg.Done()
+		var result string
+		if done {
+			result = fmt.Sprintf("%sD", roomName)
+		} else if giveUp {
+			result = fmt.Sprintf("%sG", roomName) 
+		} else {
+			result = fmt.Sprintf("%s-", roomName) 
+		}
+		roomStatusChan <- result
+	}
+
+	wg.Add(4)
+	go checkRoomStatus("A", roomStatus.IsRoomsDone.RoomA, roomStatus.IsRoomsGiveUp.RoomA)
+	go checkRoomStatus("B", roomStatus.IsRoomsDone.RoomB, roomStatus.IsRoomsGiveUp.RoomB)
+	go checkRoomStatus("C", roomStatus.IsRoomsDone.RoomC, roomStatus.IsRoomsGiveUp.RoomC)
+	go checkRoomStatus("D", roomStatus.IsRoomsDone.RoomD, roomStatus.IsRoomsGiveUp.RoomD)
+
+	go func() {
+		wg.Wait()
+		close(roomStatusChan)
+	}()
+
+	var roomStatusArray []string
+	for status := range roomStatusChan {
+		roomStatusArray = append(roomStatusArray, status)
+	}
+	log.Printf("room status array: %+v", roomStatusArray)
+	return roomStatusArray, nil
 }

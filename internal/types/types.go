@@ -26,17 +26,19 @@ type AnswerPayload struct {
 }
 
 type UserStore interface {
-	GetUserByUserName(userName string) (*models.User, error)
-	GetUserByID(id primitive.ObjectID) (*models.User, error)
-	CreateUser(user *models.User) error
-	SeedQuestionsForUser(ctx context.Context,userID primitive.ObjectID) error
-	GetAllUsers(c *fiber.Ctx) error
-	DeleteUser(c *fiber.Ctx,) error
-	UpdateUser(c *fiber.Ctx) error
-	UpdateScore(c *fiber.Ctx) error
-	GetUserByUserNameHandler(c* fiber.Ctx) error
-
+    GetUserByUserName(userName string) (*models.User, error)
+    GetUserByID(id primitive.ObjectID) (*models.User, error)
+    CreateUser(user *models.User) error
+    SeedQuestionsForUser(ctx context.Context, userID primitive.ObjectID) error
+    GetAllUsers(c *fiber.Ctx) error
+    DeleteUser(c *fiber.Ctx) error
+    UpdateUser(c *fiber.Ctx) error
+    UpdateScore(c *fiber.Ctx) error
+    GetUserByUserNameHandler(c *fiber.Ctx) error
+    UpdateUserLocation(ctx context.Context, userID primitive.ObjectID, location string) error 
+	GetRandomLocation(ctx context.Context, userID primitive.ObjectID, locationsFilePath string) (string, error)
 }
+
 type RoomStore interface {
 	EnterRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error
 	EscapeRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error
