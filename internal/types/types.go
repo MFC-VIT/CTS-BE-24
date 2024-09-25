@@ -4,6 +4,7 @@ import (
 	"C2S/internal/models"
 	"context"
 
+	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -29,6 +30,9 @@ type UserStore interface {
 	GetUserByID(id primitive.ObjectID) (*models.User, error)
 	CreateUser(user *models.User) error
 	SeedQuestionsForUser(ctx context.Context,userID primitive.ObjectID) error
+	GetAllUsers(c *fiber.Ctx) error
+	DeleteUser(c *fiber.Ctx,) error
+	UpdateUser(c *fiber.Ctx) error
 }
 type RoomStore interface {
 	EnterRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error

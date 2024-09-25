@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
+	//"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -31,22 +31,16 @@ func WriteError(r *fiber.Ctx, status int, err error) error {
 }
 
 func GetTokenFromRequest(c *fiber.Ctx) string {
-	authHeader := c.Get("Authorization")
-	log.Printf("Authorization Header: %s", authHeader)
+	tokenAuth := c.Get("Authorization")
+	tokenQuery := c.Query("token")
 
-	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-		log.Println("User is not authorized or token missing")
-		return ""
+	if tokenAuth != "" {
+		return tokenAuth
 	}
-
-	parts := strings.Split(authHeader, " ")
-	if len(parts) != 2 {
-		log.Println("Authorization header format must be Bearer {token}")
-		return ""
+	if tokenQuery != "" {
+		return tokenQuery
 	}
-
-	log.Printf("Token Part: %s", parts[1])
-	return parts[1]
+	return ""
 }
 
 type Question struct {
