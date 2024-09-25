@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"sync"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -24,6 +25,28 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 
 	if user.RoomEntered == "" {
 		return models.Question{}, fmt.Errorf("user is not in any room")
+	}
+
+	roomStatusArray, err := qs.collectStatus(ctx, userID)
+	if err != nil {
+		return models.Question{}, fmt.Errorf("failed to fetch room status: %v", err)
+	}
+
+	for _, status := range roomStatusArray {
+		if status == fmt.Sprintf("%sD", user.RoomEntered) {
+			switch user.RoomEntered {
+			case "A":
+				return models.Question{}, fmt.Errorf("clue: A")
+			case "B":
+				return models.Question{}, fmt.Errorf("clue: B")
+			case "C":
+				return models.Question{}, fmt.Errorf("clue: C")
+			case "D":
+				return models.Question{}, fmt.Errorf("clue: D")
+			default:
+				return models.Question{}, fmt.Errorf("unknown room: %s", user.RoomEntered)
+			}
+		}
 	}
 
 	var questionData models.Questions
@@ -84,6 +107,51 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 	}
 
 	return models.Question{}, fmt.Errorf("all questions answered in room: %s", user.RoomEntered)
+}
+
+
+//Go concurrency
+func (rc *QuestionControllerStore) collectStatus(ctx context.Context, userID primitive.ObjectID) ([]string, error) {
+
+	var roomStatus models.Rooms
+	err := rc.roomsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&roomStatus)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch room status: %v", err)
+	}
+	roomStatusChan := make(chan string, 4)
+
+	var wg sync.WaitGroup
+
+	checkRoomStatus := func(roomName string, done bool, giveUp bool) {
+		defer wg.Done()
+		var result string
+		if done {
+			result = fmt.Sprintf("%sD", roomName)
+		} else if giveUp {
+			result = fmt.Sprintf("%sG", roomName) 
+		} else {
+			result = fmt.Sprintf("%s-", roomName) 
+		}
+		roomStatusChan <- result
+	}
+
+	wg.Add(4)
+	go checkRoomStatus("A", roomStatus.IsRoomsDone.RoomA, roomStatus.IsRoomsGiveUp.RoomA)
+	go checkRoomStatus("B", roomStatus.IsRoomsDone.RoomB, roomStatus.IsRoomsGiveUp.RoomB)
+	go checkRoomStatus("C", roomStatus.IsRoomsDone.RoomC, roomStatus.IsRoomsGiveUp.RoomC)
+	go checkRoomStatus("D", roomStatus.IsRoomsDone.RoomD, roomStatus.IsRoomsGiveUp.RoomD)
+
+	go func() {
+		wg.Wait()
+		close(roomStatusChan)
+	}()
+
+	var roomStatusArray []string
+	for status := range roomStatusChan {
+		roomStatusArray = append(roomStatusArray, status)
+	}
+	log.Printf("room status array: %+v", roomStatusArray)
+	return roomStatusArray, nil
 }
 
 

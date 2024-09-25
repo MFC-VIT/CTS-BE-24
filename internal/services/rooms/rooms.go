@@ -25,7 +25,7 @@ func (rc *RoomControllerStore) EnterRoom(ctx context.Context, userID primitive.O
 
 	fmt.Printf("User ID: %s, Current Room: %s, Requested Room: %s\n", userID.Hex(), user.RoomEntered, roomEntered)
 
-	roomStatus, err := rc.collectUserRoomsStatus(ctx, userID)
+	roomStatus, err := rc.CollectUserRoomsStatus(ctx, userID)
 	if err != nil {
 		return fmt.Errorf("failed to collect room status: %v", err)
 	}
@@ -117,7 +117,7 @@ func (rc *RoomControllerStore) EscapeRoom(ctx context.Context, userID primitive.
 }
 
 //Go concurrency
-func (rc *RoomControllerStore) collectUserRoomsStatus(ctx context.Context, userID primitive.ObjectID) ([]string, error) {
+func (rc *RoomControllerStore) CollectUserRoomsStatus(ctx context.Context, userID primitive.ObjectID) ([]string, error) {
 
 	var roomStatus models.Rooms
 	err := rc.roomsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&roomStatus)
