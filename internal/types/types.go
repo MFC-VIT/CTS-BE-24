@@ -33,6 +33,9 @@ type UserStore interface {
 	GetAllUsers(c *fiber.Ctx) error
 	DeleteUser(c *fiber.Ctx,) error
 	UpdateUser(c *fiber.Ctx) error
+	UpdateScore(c *fiber.Ctx) error
+	GetUserByUserNameHandler(c* fiber.Ctx) error
+
 }
 type RoomStore interface {
 	EnterRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error
