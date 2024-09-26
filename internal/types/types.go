@@ -35,7 +35,7 @@ type UserStore interface {
 	UpdateUser(c *fiber.Ctx) error
 	UpdateScore(c *fiber.Ctx) error
 	GetUserByUserNameHandler(c* fiber.Ctx) error
-
+	GetLeaderBoardHandler(c* fiber.Ctx) error
 }
 type RoomStore interface {
 	EnterRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error

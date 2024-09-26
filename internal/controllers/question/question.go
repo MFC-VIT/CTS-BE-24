@@ -7,8 +7,6 @@ import (
 	"C2S/internal/utils"
 	"fmt"
 	"strings"
-	"log"
-	"regexp"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -21,20 +19,10 @@ type Handler struct {
 func NewHandler(store types.QuestionStore) *Handler {
 	return &Handler{store: store}
 }
-var objectIdRegex = regexp.MustCompile(`^ObjectID\("([0-9a-fA-F]{24})"\)$`)
 func (h *Handler) HandleGetQuestion(c *fiber.Ctx) error {
 	userIDParam := c.Params("userID")
 	userIDFromToken := c.Locals(middleware.UserKey).(string)
-	log.Printf("User ID from token: %s", userIDFromToken)
-	log.Printf("User ID from params: %s", userIDParam)
-	matches := objectIdRegex.FindStringSubmatch(userIDFromToken)
-		if len(matches) != 2 {
-			log.Println("Invalid ObjectID format:", userIDParam)
-			return utils.WriteError(c,fiber.StatusForbidden, fmt.Errorf("invalid token"))
-		}
-		hexID := matches[1]
-		log.Println("Extracted hex string:", hexID)
-	if userIDParam != hexID {
+	if userIDParam != userIDFromToken {
 		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
 	}
 	userID, err := primitive.ObjectIDFromHex(userIDParam)
@@ -61,25 +49,20 @@ func (h *Handler) HandlePostAnswer(c *fiber.Ctx) error {
 		var payload types.AnswerPayload
 		userIDParam := c.Params("userID")
 		userIDFromToken := c.Locals(middleware.UserKey).(string)
-
-		matches := objectIdRegex.FindStringSubmatch(userIDFromToken)
-		if len(matches) != 2 {
-			log.Println("Invalid ObjectID format:", userIDParam)
-			return utils.WriteError(c,fiber.StatusForbidden, fmt.Errorf("invalid token"))
-		}
-		hexID := matches[1]
-		log.Println("Extracted hex string:", hexID)
-		if userIDParam != hexID {
+		if userIDParam != userIDFromToken {
 			return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
 		}
 		userID, err := primitive.ObjectIDFromHex(userIDParam)
-			if err != nil {
+		if err != nil {
 			return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid userID format"))
-			}
+		}
+		if err := c.BodyParser(&payload); err != nil {
+			return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid request format"))
+		}
 			fmt.Printf("Received request to get next question for user ID: %s\n", userID.Hex())
-			if err := c.BodyParser(&payload); err != nil {
+		if err := c.BodyParser(&payload); err != nil {
 				return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid request format"))
-			}
+		}
 	
 		fmt.Printf("Received request to submit answer for user ID: %s, Question: %s\n", userID.Hex(), payload.Question)
 		questionData := models.Question{

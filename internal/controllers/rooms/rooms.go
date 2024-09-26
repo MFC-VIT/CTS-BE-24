@@ -6,7 +6,6 @@ import (
 	"C2S/internal/utils"
 	"fmt"
 	"log"
-	"regexp"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -20,21 +19,12 @@ type Handler struct {
 func NewHandler(store types.UserStore, roomcontrollerstore types.RoomStore) *Handler {
 	return &Handler{store: store, roomcontrollerstore: roomcontrollerstore}
 }
-var objectIdRegex = regexp.MustCompile(`^ObjectID\("([0-9a-fA-F]{24})"\)$`)
+
 func (h *Handler) HandleEnterRoom(c *fiber.Ctx) error {
 	userIDParam := c.Params("userID")
 
 	userIDFromToken := c.Locals(middleware.UserKey).(string)
-	log.Printf("User ID from token: %s", userIDFromToken)
-	log.Printf("User ID from params: %s", userIDParam)
-	matches := objectIdRegex.FindStringSubmatch(userIDFromToken)
-		if len(matches) != 2 {
-			log.Println("Invalid ObjectID format:", userIDParam)
-			return utils.WriteError(c,fiber.StatusForbidden, fmt.Errorf("invalid token"))
-		}
-		hexID := matches[1]
-		log.Println("Extracted hex string:", hexID)
-	if userIDParam != hexID {
+	if userIDParam != userIDFromToken {
 		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
 	}
 
@@ -65,18 +55,7 @@ func (h *Handler) HandleEscapeRoom(c *fiber.Ctx) error {
 	userIDParam := c.Params("userID")
 	
 	userIDFromToken := c.Locals(middleware.UserKey).(string)
-
-	//serIDFromToken := c.Locals(middleware.UserKey).(string)
-	log.Printf("User ID from token: %s", userIDFromToken)
-	log.Printf("User ID from params: %s", userIDParam)
-	matches := objectIdRegex.FindStringSubmatch(userIDFromToken)
-		if len(matches) != 2 {
-			log.Println("Invalid ObjectID format:", userIDParam)
-			return utils.WriteError(c,fiber.StatusForbidden, fmt.Errorf("invalid token"))
-		}
-		hexID := matches[1]
-		log.Println("Extracted hex string:", hexID)
-	if userIDParam != hexID {
+	if userIDParam != userIDFromToken {
 		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
 	}
 	userID, err := primitive.ObjectIDFromHex(userIDParam)
@@ -90,7 +69,6 @@ func (h *Handler) HandleEscapeRoom(c *fiber.Ctx) error {
 	if err := c.BodyParser(&payload); err != nil {
 		return utils.WriteError(c, fiber.StatusBadRequest,  fmt.Errorf("invalid payload"))
 	}
-	//log.Println(Room)
 	err = h.roomcontrollerstore.EscapeRoom(c.Context(), userID, payload.RoomEntered)
 	if err != nil {
 		log.Println(err)

@@ -25,7 +25,7 @@ func (rc *RoomControllerStore) EnterRoom(ctx context.Context, userID primitive.O
 
 	fmt.Printf("User ID: %s, Current Room: %s, Requested Room: %s\n", userID.Hex(), user.RoomEntered, roomEntered)
 
-	roomStatus, err := rc.collectUserRoomsStatus(ctx, userID)
+	roomStatus, err := rc.CollectUserRoomsStatus(ctx, userID)
 	if err != nil {
 		return fmt.Errorf("failed to collect room status: %v", err)
 	}
@@ -59,14 +59,13 @@ func (rc *RoomControllerStore) EnterRoom(ctx context.Context, userID primitive.O
 }
 
 func (rc *RoomControllerStore) EscapeRoom(ctx context.Context, userID primitive.ObjectID, roomEntered string) error {
-	usersCollection := rc.db.Collection(os.Getenv("MONGO_USER_COLLECTION"))
+
 	var user models.User
-	err := usersCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
-	log.Println(user.RoomEntered)
-	log.Println(roomEntered)
+	err := rc.usersCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
 	if err != nil {
 		return fmt.Errorf("user not found: %v", err)
 	}
+
 	if user.RoomEntered != roomEntered {
 		return fmt.Errorf("user is not in room: %s", roomEntered)
 	}
@@ -118,7 +117,7 @@ func (rc *RoomControllerStore) EscapeRoom(ctx context.Context, userID primitive.
 }
 
 //Go concurrency
-func (rc *RoomControllerStore) collectUserRoomsStatus(ctx context.Context, userID primitive.ObjectID) ([]string, error) {
+func (rc *RoomControllerStore) CollectUserRoomsStatus(ctx context.Context, userID primitive.ObjectID) ([]string, error) {
 
 	var roomStatus models.Rooms
 	err := rc.roomsCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&roomStatus)
@@ -234,15 +233,3 @@ func (rc *RoomControllerStore) CheckUnansweredQuestionsAndUpdateScore(ctx contex
 // 	}
 // 	return roomStatusArray, nil
 // }
-
-
-
-
-
-
-
-
-
-
-
-
