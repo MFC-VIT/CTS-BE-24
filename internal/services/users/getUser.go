@@ -344,7 +344,7 @@ func (s *Store) GetUserRoomStatus(ctx context.Context, userID primitive.ObjectID
 		},
 		{
 			{Key: "$lookup", Value: bson.D{
-				{Key: "from", Value: "rooms"}, 
+				{Key: "from", Value: "Rooms"}, 
 				{Key: "localField", Value: "_id"}, 
 				{Key: "foreignField", Value: "user_id"}, 
 				{Key: "as", Value: "room_details"}, 
