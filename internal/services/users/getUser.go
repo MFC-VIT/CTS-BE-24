@@ -239,6 +239,16 @@ func (s* Store) UpdateScore(c *fiber.Ctx) error{
 	return c.Status(200).SendString("User updated")
 }
 func (s *Store) GetRandomLocation(ctx context.Context, userID primitive.ObjectID, locationsFilePath string) (string, error) {
+
+	user, err := s.GetUserByID(userID)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch user: %v", err)
+	}
+	if user.Location != "" {
+		return user.Location, nil
+	}
+
+
 	roomStatusArray, err := s.collectUserRoomsStatus(ctx, userID) 
 	if err != nil {
 		return "", fmt.Errorf("failed to collect user rooms status: %v", err)
