@@ -35,6 +35,7 @@ type UserStore interface {
     UpdateUser(c *fiber.Ctx) error
     UpdateScore(c *fiber.Ctx) error
     GetUserByUserNameHandler(c *fiber.Ctx) error
+	GetLeaderBoardHandler(c* fiber.Ctx) error 
     UpdateUserLocation(ctx context.Context, userID primitive.ObjectID, location string) error 
 	GetRandomLocation(ctx context.Context, userID primitive.ObjectID, locationsFilePath string) (string, error)
 }
