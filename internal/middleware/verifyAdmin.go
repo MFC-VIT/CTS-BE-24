@@ -3,43 +3,44 @@ package middleware
 import (
 	"C2S/internal/types"
 	"log"
-	"regexp"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-var objectIdRegex = regexp.MustCompile(`^ObjectID\("([0-9a-fA-F]{24})"\)$`)
 
-func IsAdmin(store types.UserStore) fiber.Handler{
-	return func (c* fiber.Ctx) error{
-		userID := c.Locals(UserKey)
-		if(userID==""){
+// IsAdmin middleware checks if the user is an admin based on the JWT-stored userID
+func IsAdmin(store types.UserStore) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		userID := c.Locals(UserKey).(string) // Extract userID from the JWT stored in Locals
+
+		// Check if userID is empty
+		if userID == "" {
 			return permissionDenied(c)
 		}
-		log.Printf("%T",userID)
-		log.Println(userID)
-		matches := objectIdRegex.FindStringSubmatch(userID.(string))
-		if len(matches) != 2 {
-			log.Println("Invalid ObjectID format:", userID)
-			return permissionDenied(c)
-		}
-		hexID := matches[1]
-		log.Println("Extracted hex string:", hexID)
-		usid, err := primitive.ObjectIDFromHex(hexID)
+
+		log.Printf("Extracted userID: %s", userID)
+
+		// Convert userID (Hex string) to ObjectID
+		usid, err := primitive.ObjectIDFromHex(userID)
 		if err != nil {
-			log.Println("Invalid ObjectID format:", err)
+			log.Printf("Invalid ObjectID format: %v", err)
 			return permissionDenied(c)
 		}
-		log.Println("UserID:", usid)
-		user,err := store.GetUserByID(usid)
-		if err!=nil{
+
+		// Fetch the user from the database using the ObjectID
+		user, err := store.GetUserByID(usid)
+		if err != nil {
 			log.Println("Cannot find user")
 			return permissionDenied(c)
 		}
-		if !user.IsAdmin{
-			permissionDenied(c)
+
+		// Check if the user has admin privileges
+		if !user.IsAdmin {
+			log.Println("User is not an admin")
+			return permissionDenied(c)
 		}
+
+		// Allow the request to proceed
 		return c.Next()
 	}
 }
-
