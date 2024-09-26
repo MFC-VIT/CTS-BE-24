@@ -325,3 +325,59 @@ func (s *Store) collectUserRoomsStatus(ctx context.Context, userID primitive.Obj
 	log.Printf("room status array: %+v", roomStatusArray)
 	return roomStatusArray, nil
 }
+
+
+func (s *Store) GetUserRoomStatus(ctx context.Context, userID primitive.ObjectID) (*models.Rooms, error) {
+	pipeline := mongo.Pipeline{
+		{
+			{Key: "$match", Value: bson.D{{Key: "_id", Value: userID}}},
+		},
+		{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "rooms"}, 
+				{Key: "localField", Value: "_id"}, 
+				{Key: "foreignField", Value: "user_id"}, 
+				{Key: "as", Value: "room_details"}, 
+			}},
+		},
+		{
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$room_details"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
+		},
+		{
+			{Key: "$project", Value: bson.D{
+				{Key: "username", Value: 1}, 
+				{Key: "is_rooms_done", Value: bson.D{
+					{Key: "room_a", Value: "$room_details.is_rooms_done.room_a"},
+					{Key: "room_b", Value: "$room_details.is_rooms_done.room_b"},
+					{Key: "room_c", Value: "$room_details.is_rooms_done.room_c"},
+					{Key: "room_d", Value: "$room_details.is_rooms_done.room_d"},
+				}},
+				{Key: "is_rooms_giveup", Value: bson.D{
+					{Key: "room_a", Value: "$room_details.is_rooms_giveup.room_a"},
+					{Key: "room_b", Value: "$room_details.is_rooms_giveup.room_b"},
+					{Key: "room_c", Value: "$room_details.is_rooms_giveup.room_c"},
+					{Key: "room_d", Value: "$room_details.is_rooms_giveup.room_d"},
+				}},
+			}},
+		},
+	}
+
+	cursor, err := s.usersCollection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, fmt.Errorf("failed to perform aggregation: %v", err)
+	}
+	defer cursor.Close(ctx)
+
+	var result models.Rooms
+	if cursor.Next(ctx) {
+		if err := cursor.Decode(&result); err != nil {
+			return nil, fmt.Errorf("failed to decode result: %v", err)
+		}
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, fmt.Errorf("cursor error: %v", err)
+	}
+
+	return &result, nil
+}

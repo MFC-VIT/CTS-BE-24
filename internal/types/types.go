@@ -38,6 +38,7 @@ type UserStore interface {
 	GetLeaderBoardHandler(c* fiber.Ctx) error 
     UpdateUserLocation(ctx context.Context, userID primitive.ObjectID, location string) error 
 	GetRandomLocation(ctx context.Context, userID primitive.ObjectID, locationsFilePath string) (string, error)
+	GetUserRoomStatus(ctx context.Context, userID primitive.ObjectID) (*models.Rooms, error)
 }
 
 type RoomStore interface {

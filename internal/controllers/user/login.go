@@ -89,3 +89,22 @@ func (h *Handler) HandleGetRandomLocation(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *Handler) HandleGetRoomStatus(c *fiber.Ctx) error {
+	userIDParam := c.Params("userID")
+	userIDFromToken := c.Locals(middleware.UserKey).(string)
+
+	userID, err := primitive.ObjectIDFromHex(userIDParam)
+	if err != nil {
+		return utils.WriteError(c, fiber.StatusBadRequest, fmt.Errorf("invalid user ID: %v", err))
+	}
+	if userIDParam != userIDFromToken {
+		return utils.WriteError(c, fiber.StatusForbidden, fmt.Errorf("permission denied: user ID mismatch"))
+	}
+	roomStatus, err := h.store.GetUserRoomStatus(c.Context(), userID)
+	if err != nil {
+		return utils.WriteError(c, fiber.StatusInternalServerError, fmt.Errorf("failed to get room status: %v", err))
+	}
+
+	return c.Status(fiber.StatusOK).JSON(roomStatus)
+}

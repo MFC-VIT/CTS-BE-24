@@ -22,4 +22,5 @@ func (u *UserRoutes) RegisterRoutes(router fiber.Router) {
 	router.Post("/user/login", u.handler.HandleLogin)
 	router.Post("/user/register", u.handler.HandleRegister)
 	router.Get("/user/:userID/location", middleware.WithJWTAuth(u.userStore),u.handler.HandleGetRandomLocation)
+	router.Get("/user/:userID/roomstatus", middleware.WithJWTAuth(u.userStore),u.handler.HandleGetRoomStatus)
 }
