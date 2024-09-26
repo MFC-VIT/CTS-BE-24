@@ -10,7 +10,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	//"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"C2S/internal/types"
 	"C2S/internal/utils"
@@ -37,41 +37,31 @@ func CreateJWT(secret []byte, userID string) (string, error) {
 const UserKey  = "userID"
 
 func WithJWTAuth(store types.UserStore) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		tokenString := utils.GetTokenFromRequest(c)
-		log.Printf("Token: %s", tokenString)
+    return func(c *fiber.Ctx) error {
+        tokenString := utils.GetTokenFromRequest(c)
+        log.Printf("Token: %s", tokenString)
 
-		token, err := validateJWT(tokenString)
-		if err != nil {
-			log.Printf("failed to validate token(1): %v", err)
-			return permissionDenied(c)
-		}
-		if !token.Valid {
-			log.Println("invalid token")
-			return permissionDenied(c)
-		}
+        token, err := validateJWT(tokenString)
+        if err != nil {
+            log.Printf("failed to validate token(1): %v", err)
+            return permissionDenied(c)
+        }
+        if !token.Valid {
+            log.Println("invalid token")
+            return permissionDenied(c)
+        }
 
-		claims := token.Claims.(jwt.MapClaims)
-		str := claims["userID"].(string)
+        claims := token.Claims.(jwt.MapClaims)
+        userID := claims["userID"].(string)
 
-		userID, err := primitive.ObjectIDFromHex(str)
-		if err != nil {
-			log.Printf("failed to convert userID to ObjectID: %v", err)
-			return permissionDenied(c)
-		}
+        // Store userID in Locals as a string
+        c.Locals(UserKey, userID)
 
-		u, err := store.GetUserByID(userID)
-		if err != nil {
-			log.Printf("failed to get userID: %v", err)
-			return permissionDenied(c)
-		}
-
-		c.Locals(UserKey, u.ID.Hex())
-
-
-		return c.Next()
-	}
+        return c.Next()
+    }
 }
+
+
 
 func validateJWT(tokenString string) (*jwt.Token, error) {
 	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
