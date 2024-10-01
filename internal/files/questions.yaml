@@ -1,142 +1,389 @@
 questions:
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "A"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "A"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "A"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "A"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "B"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "B"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "B"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "B"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "C"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "C"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "C"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "C"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "D"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "D"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "D"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "D"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  question_id: "1"
-  answer: ""
-  room: "D"
-  answered: false
-- question: |
-            The criminal intercepted a message that was encoded.
-             Your mission is to restore the message and reveal the true content to continue.
-              Eg - Input : 106 101 119 101 108 108 101 114 121 
-  
+  - question: "The criminal intercepted a message that was encoded. Your mission is to restore the message and reveal the true content to continue. Eg - Input : 106 101 119 101 108 108 101 114 121 "
+    question_id: 1
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "The criminal intercepted a message that was encoded. Your mission is to restore the message and reveal the true content to continue. Eg - Input : 19 21 19 16 5 3 20 "
+    question_id: 2
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "In the investigation, you found a mysterious code left by the culprit. The code seems to have a hidden pattern. You suspect that the code could reveal a secret message if it reads the same backward as it does forward. Verify the same. (Output 1 if true else 0). Input : deified"
+    question_id: 3
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "During the investigation, You encountered a binary pattern that needs to be matched to a known pattern.The suspects also have a similar binary pattern. Check if the found binary code matches with any of the given suspects. Suspects :  0011 1010 1101  1101 0010 0101  1001 1010 1111, Found Pattern : 1101 0010 0101"
+    question_id: 5
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 using each only once. (ex: 39 x 186 = 7254)"
+    question_id: 6
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "A woman discovers a cryptic string, tRAx bJlM, at the crime scene. Believing it to be a passkey to a locked box, she suspects the box contains the killer's name. How can she decipher the string to unlock the box?(key to solving the mystery lies in its uppercase letters, think like numbers). Hint :- Take each UpperCase value to 1 and LowerCase value to 0 and find the binary number "
+    question_id: 7
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "A cryptic string COdeToSurV1ve is left behind after a heist. To uncover the mastermind's identity,Convert each uppercase and lowercase letter in the string to its corresponding `hexadecimal value ,Sum the hexadecimal values together to obtain a single number,Multiply the sum by 2 and add 388,the resulting number satisfies the property where the sum of each digit raised to the power of the number of digits equals the number itself, it's the special number. This special number is the mastermind's id ? What is the ID ?(if the hex value is of 5A , 5B , 5C , 5D ,5E ,5F then leave them ) "
+    question_id: 8
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "In the heart of the Lost Temple lies a cryptic cipher that only the perceptive can unlock. The ancient codebreakers left a clue with their cipher: “Happiness can be quantified. To uncover the “Key of Happiness, you must first focus on the hidden string “HappINess. Convert this string into binary values(uppercase as 1 and lowercase as 0)  and derive the key from its binary representation and decipher the happiness key."
+    question_id: 9
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "In a mysterious digital vault, there lies a set of enchanted boxes. Each box is marked with a unique symbol, and the vault keeper has the power to store a hidden treasure within them. One day, the keeper decided to use two different keys to access these boxes. The first key bore the symbol b, and the second key bore the symbol c. The keeper placed a treasure valued at 687 in the box associated with key b. But before sealing the vault, the keeper changed their mind and placed a treasure valued at 834 in the box associated with key c. Now, the vault is sealed, and the only way to retrieve the treasure is by using one of the keys.If you were to use the key marked with the symbol b to unlock the vault, what treasure would you find inside?"
+    question_id: 10
+    answer: ""
+    room: "A"
+    answered: false
+  - question: |
+      A secret message, a hidden code,A puzzle to solve, a heavy load.A string of letters, a cryptic clue,Each letter holds a value true.
+      Convert each letter to its numeric worth,Add the values, find their sum from birth.The sum reveals a number, pure and bright,A perfect number, a guiding light.What is the number, the secret key,That unlocks the puzzle, sets us free? solve it (the cryptic string comprises the first letter after every , or . .
+      Convert the lowercase letters and uppercase letters  to their ascii value and solve. "
+    question_id: 11
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "You found a modified code. The original code and the modified version differ in several bits. To uncover the original message hidden within the code, you need to find the total number of flips. Input : 65 Output : 98"
+    question_id: 12
+    answer: ""
+    room: "B"
+    answered: false
+  - question: ". A key piece of evidence was encoded in hexadecimal, but one of the bytes has gone missing and it is not in the correct order. The remaining bytes spell out a word, but you need to find the missing byte and rearrange the letters to find the evidence. Input = 68636E??7277"
+    question_id: 13
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "An alien on Mars is celebrating its 11th birthday. If its age was 11011 on its 11th birthday, 9009 on its 10th birthday, and 7007 on its 9th birthday, what will be the sum of its ages when it celebrates its 18th birthday?"
+    question_id: 14
+    answer: ""
+    room: "B"
+    answered: false
+  - question: " What is 1/2 velvet , 3/8 lordship , and 1/8 elephant?"
+    question_id: 15
+    answer: ""
+    room: "B"
+    answered: false
+  - question: " What will be the last digit of 3.6e+47! (Factorial)?"
+    question_id: 16
+    answer: ""
+    room: "B"
+    answered: false
+  - question:  "You are in a hotel room and you forgot the key to the door lock, but you remember your friends telling you that its first 2 even powers of 2 followed by first 2 odd powers of 3. What is the code?"
+    question_id: 17
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "An Armstrong Number is a number whose sum of digits raised to the power of the number of digits equal to the number itself. If it is known that the first of this kind of number exists after the number 150. What is the first Armstrong number?"
+    question_id: 18
+    answer: ""
+    room: "B"
+    answered: false
+  - question: " Given an integer 10, find the highest product when 10 is broken down into a sum of 3 numbers."
+    question_id: 19
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "A Stack is a coding construct which follows the LIFO principle (the element going in the last is the first one to come out). The pop function removes the top most element in the stack. If the following sequence is entered then what will be the fourth element to be outputted? 12 43 22 55 47 pop 65 pop pop 78 98 12 11 pop 12 43 90 pop pop 81"
+    question_id: 20
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "A pointer is said to point to the location at which the value of a variable is stored. Following this diagram what is the location of the value 39? a = 32; *a = 97; **a = 39; ***a = 12; ****a = 2;"
+    question_id: 21
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "An array that initially had 14 elements, was modified to not consider positions marked 0. What will be the position of the middle element? [0,3,4,66,73,88,0,12,0,0,0,6,54,87]"
+    question_id: 22
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "A fibonacci series is a recursive series where the next element is the sum of the previous two elements with the first two elements being 0 and 1. Now Arun started the series with 2 and 10. What is the 10th element of this Series?"
+    question_id: 23
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "What will be the 5th element after the following is sorted according to ascii values? A b 4 f D 5 T N k n d"
+    question_id: 24
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "If HEE+SHE= GIHE, and we assume (I =2), where the alphabets take the values from (0-9). Find the value of (S+H+E)? "
+    question_id: 25
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "While Traversing through the desert you find a temple with an inscription on one of its walls. You think if this room is solved it can lead to an ancient tomb. You see the wall opposite this having a Da Vinci Code cryptex with 7 symbols in 4 columns which can be shifted horizontally.You need ₲ in every column for the each column having the following series: ₲ : ₲௹﷼₵૱₾, The Cylinder initially have the following inscriptions: ૱₵₾﷼ Minimum number of shifts needed to be done to open the tomb?"
+    question_id: 26
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "There are five different buildings. Following are the clues given: 1) A to E in a row. 2) A is to the right of B. 3) E is to the left of C and right of A. 4) B is to the right of D. How many buildings are there between D and C?"
+    question_id: 27
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "Given an array of N integers where each value represents the number of chocolates in a packet. Each packet can have a variable number of chocolates. There are m students, the task is to distribute chocolate packets such that: Each student gets one packet. The difference between the number of chocolates in the packet with maximum chocolates and the packet with minimum chocolates is minimum. What is the minimum difference for the following input? Array: {7, 3, 2, 4, 9, 12, 56}, No. of Students = 3"
+    question_id: 28
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "Anagram is a word or phrase that is made by arranging the letters of another word or phrase in a different order. Given the Input: [eat,tea,tan,ate,nat,bat,eta]. The number of words in the largest group of anagrams from the input set?"
+    question_id: 29
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "You are a cashier who is asked to give exact change back to the shopper. You have the following coins left in your register: [1,2,2,2,2,5,5,5,10,25]. You are asked to give the shopper back $43 back to the shopper using the least number of coins. How many coins did you give to the shopper?"
+    question_id: 30
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "You are registering for extra courses in FFCS. You have the option of four Courses A,B,C,D. You have 4 semesters to complete all four courses. Following is a list of courses along with their prerequisites: B:A, C:A, D:B, D:C. In how many ways can the courses be taken?"
+    question_id: 31
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "You are climbing a staircase with n stairs. You can either climb one stair or climb two stairs at a time. How many distinct ways are there to climb a staircase with 6 steps (permutations matter)?"
+    question_id: 32
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "You are given three dice each having six faces numbered from 1 to 6 according to a regular die. What lowest combination can you get for 12? (Ex: 3: Answer: 111)"
+    question_id: 33
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "a, b, *c, d = [1, 2, 3, 4, 5, 6, 7], print(c). What will be the output of the given code ?"
+    question_id: 34
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "In the heart of the enigmatic city of Codora, whispers spread of a hidden riddle left behind by an ancient code master. Many had tried to solve it, but none had succeeded—until a curious programmer named Alice stumbled upon a peculiar string of symbols in a forgotten corner of the Codora Codex. The riddle was presented as a simple yet mysterious challenge: tuples = (a,b,c,d); X, *y = tuples, print(y). Help Alice solve the mysterious challenge by finding  the output.  Give the output as the number of elements in y."
+    question_id: 35
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "How many Lychrel numbers are there below 12544? (A Lychrel number is a number that never forms a palindrome through the iterate-and-reverse process.)"
+    question_id: 36
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "In the shadowy world of encrypted messages, Agent Reed was on the trail of a dangerous hacker known as 'The Cubist.' The hacker had left a series of puzzles that, when solved, would reveal the location of their next move. Reed stumbled upon one particularly strange riddle embedded in a piece of code. It was said that the solution to this puzzle would unlock the first part of the hacker's secret: Agent Reed understood that the code was comparing two values. Can you uncover the hacker's trick and determine what the value of x truly is? x = bin ((3**9) -1) == '{}'.format(bin((3**9)-1)), print(x)"
+    question_id: 37
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "A doctor is working with a prescription system that uses a coding snippet to update medication labels. The current prescription label is 'abcefd'. To ensure the patient receives the correct medicine, the doctor needs to replace the segment 'cd' with '12'. In Python, the doctor uses the following code to update the label: print('abcefd'.replace('cd', '12')). What will the updated prescription label be after running this code?"
+    question_id: 38
+    answer: ""
+    room: "D"
+    answered: false
+  - question: 'In a small town, there was a wise old pharmacist who had a special way of organizing medicine labels. To ensure he could quickly find the right label, he used a special method to sort them based on their characters. One day, he received a label with the string "abCD123" and needed to determine the smallest character in the sequence to sort it properly (according to ASCII notation). What was the smallest character the pharmacist found in the label after running this code? '
+    question_id: 39
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "A pharmacist needs to replace a part of a prescription label 'liverA32' to make it correct. The new segment '101' needs to replace 'A32' using this snippet: print('liverA32'.replace('A32', '101')) What will be the updated prescription label?"
+    question_id: 40
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "A wizard is organizing magical scrolls with labels that are mixed up. The labels are given in the form of a string 'abracadabra'. The wizard needs to determine the number of times the letter 'a' appears in the string using the following snippet: print('abracadabra'.count('a'))"
+    question_id: 41
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "In a quantum maze, every step has a 50% chance of taking you forward or backward. The maze's quantum state alters the step direction randomly. You got an algorithm to predict these fluctuations. It repeats the given pattern. What will be the direction you will face after 6 iterations? (Up for upward facing and Down for Downward facing) [initial, ~initial, ~initial, initial] Initial = 1;"
+    question_id: 42
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "In a time warp, every year alternates between fast-forwarding 3 years or rewinding 2 years. Starting from 2024, after 10 iterations, where do you end up?"
+    question_id: 43
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "A bridge collapses at Fibonacci intervals. After each Fibonacci step, one part of the bridge disappears. How many pieces remain after 5 steps, with bridge length as 100?"
+    question_id: 44
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "In an alternate universe, clocks teleport between two times. A clock shows time in 24-hour format and teleports 3 hours forward every second tick. What will the final time be after 6 ticks, starting at 18:00?"
+    question_id: 45
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "You are stuck in a teleportation loop where every second teleport takes you to a position twice as far from the origin otherwise 3 steps are added. After 4 teleports, where are you? (Position = 1)"
+    question_id: 46
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "You're playing a game where two dice are rolled, and if both rolls are even numbers, you win. What are the odds of winning after 3 dice rolls? (Round off to 2 decimal places)"
+    question_id: 47
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "You intercept a message encrypted using a Caesar Cipher, but the shift alternates between +3 and -2 for each letter. What is the decrypted message? (message = 'Kfmpc')"
+    question_id: 48
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "A time warp machine teleports you forward by a prime number of years each time. What year will it be after teleporting 4 times from 2024?"
+    question_id: 49
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "A lock opens only if a number is both prime and a palindrome. What will the lock code be after this code runs? Code = 101"
+    question_id: 50
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "A hidden treasure chest unlocks when you input the sum of a geometric series with a multiplier of 3. What will the sum be after this code runs? (Total = 0)"
+    question_id: 51
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "In the Timekeeper's Labyrinth, you find a grand, ancient clock adorned with three unique dials: ∏n, √n, and n/1.618. Apply the function to the number 6 (product from 1 to n), and then use the result as input for the next function and so on. Write in (op1,op2,op3) format."
+    question_id: 52
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "Deep within the hidden vault of a forgotten civilization, a series of numbers are etched into a silver tablet. The inscription states: 'Among these, find the number that reveals its nature when reflected in a mirror of ancient truth. This reflection will unveil the path to the sacred chamber using the magic base of 6.' The numbers are: 54321, 67876, 12821, 10101."
+    question_id: 53
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "A cryptic map shows coordinates in degrees, minutes, and seconds: 47°35'12'' N, 122°20'32'' W. The treasure is hidden where you go north till you change hemispheres and west till you come back in the same hemisphere. You are only allowed to traverse in integral multiples of the coordinates. Answer with rounding both numbers using the floor function and adding them."
+    question_id: 54
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "You discover an alphanumeric code for an aristocrat's chamber: B5, C7, A2. Where A represents 1, B represents 2, etc. Adding the three numbers opens the aristocrat's chamber. What is the code for the chamber?"
+    question_id: 55
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "You encounter a series of numbers in an old manuscript: 1, 3, 6, 10, 15. The manuscript hints that the sequence follows a specific pattern. Find the number at position 8."
+    question_id: 56
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "You are given a matrix of numbers representing ASCII values. Your task is to extract the word hidden in the matrix using this process: 1. Traverse the matrix in a spiral order starting from the top left. 2. Convert each number in the spiral path to its corresponding ASCII character. 3. Find the hidden word. 4. The number of alphabets in the hidden word is the result [ 86, 73, 84 ],[ 32, 86, 69 ],[ 76, 76, 79 ],[ 82, 69, 33 ]"
+    question_id: 57
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "You are given a 5x5 grid representing a maze, where each cell has a weight indicating the cost to move through that cell: | 1 | 3 | 1 | 2 | 1 |;| 2 | 1 | 2 | 1 | 3 |;| 3 | 2 | 1 | 3 | 1 |;| 1 | 2 | 3 | 1 | 2 |;| 1 | 1 | 1 | 2 | 1 |. What is the total cost for the shortest path (only translational motion)?"
+    question_id: 58
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "Give output for the following pseudocode: Matrix = {'A': [1, 2, 3, 4], 'B': [10, 20, 30, 40]}. Element-wise comparisons: condition1 = matrix['A'] > 2; condition2 = matrix['B'] < 35. Array union operation (condition1 or condition2).sum()"
+    question_id: 59
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "DICT={1: 'one(float)', 1: 'one (int)', True: 'one (bool)', '1': 'one (string)'}, print(DICT). Give the output of the following code. How many key values are there in the given output?"
+    question_id: 60
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "A woman discovers a cryptic string, 'SurViVE,' at the crime scene. Believing it to be a passkey to a locked box, she suspects the box contains the killer's name. How can she decipher the string to unlock the box?(key to solving the mystery lies in its uppercase letters)(think like numbers) (convert the uppercase alphabets to numbers and sum them up)"
+    question_id: 61
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "A detective investigating a high-profile heist finds a mysterious string, 'FindMEIFYouCan,' left behind by the elusive thief. She believes it's a passcode to a secure vault that holds the thief's identity. The detective suspects the key to unlocking the vault lies in the uppercase letters of the string. If she interprets these letters as numbers, possibly converting them into binary, how can she crack the code and capture the thief?"
+    question_id: 62
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "A man finds himself trapped in a room with a ticking clock and a deadly poison coursing through his veins. In front of him is a safe containing the antidote, but it's locked. His only clue is a cryptic string on a nearby screen: 'SurViVE.' Desperately, he realizes that the key to unlocking the safe lies in the uppercase letters of the string. To save his life, he must think of these letters as numbers, perhaps converting them into binary. How can he decipher the code and retrieve the antidote in time?"
+    question_id: 63
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "In the mystical town of Spellhaven, Grand Sorceress Elara discovers a prophecy referencing the number 7 in various magical contexts. Each interpretation of 7—seventh celestial sphere, prime magical constant, mystic power of unity, and Forgotten Hex spell system—remains 7 in hexadecimal. Summing these values, she finds 1C in hex. This result, 1C, is key to unlocking the spell needed to avert the looming catastrophe. The sorceress translates this into base 7 to understand more. What did she find?"
+    question_id: 64
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "In a futuristic materials research lab, a team of engineers is developing a new composite material for spacecraft. To store information about the material's properties, they use Python to catalog its technical data. One of the engineers, Alex, writes the following line of code to store the material's strength and density: technical_data = {'strength': 115.5, 'density': 15.1}, print (technical_data). Later, another engineer, Maya, enters the lab and suggests a slightly different way to write the same information: technical_data = dict(strength=115.5, density=15.1), print(technical_data). How many elements are common in both technical data?"
+    question_id: 65
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "You are given an integer n = 12. Perform the following operations: 1. Shift n to the left by 1 position using the binary left shift operator (<<). 2. Shift n to the right by 2 positions using the binary right shift operator (>>). Calculate and provide the smaller of the two results."
+    question_id: 66
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "The sequence of triangle numbers is generated by adding the natural numbers. So the 7th triangle number would be 1+2+3+4+5+6+7=28. The first ten terms would be: 1,3,6,10,15,21,28,36,45,55. What will be the first number of this series to have over 700 divisors?"
+    question_id: 67
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "The following iterative sequence is defined for the set of positive integers: n→n/2 (n is even) and n→3n+1 (n is odd). Using the rule above and starting with 13, we generate the following sequence: 13→40→20→10→5→16→8→4→2→1. It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms. What is the smallest number that will contain 87 terms?"
+    question_id: 68
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "2^15=32768 and the sum of its digits is 3+2+7+6+8=26. What is the sum of the digits of the number 2^566?"
+    question_id: 69
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "You are given the following information, but you may prefer to do some research for yourself. 1 Jan 1900 was a Monday. Thirty days has September, April, June and November. All the rest have thirty-one, saving February alone, which has twenty-eight, rain or shine. And on leap years, twenty-nine. A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400. How many Sundays fell on the first of the month during the period 1 Jan 1901 to 31 Dec 1951?"
+    question_id: 70
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "Find the last digit of the series 1^1+2^2+3^3+....+922^922."
+    question_id: 71
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "Suppose Iris, Jana and Karim are playing a game. There are three green hats and two pink hats available. The players are blindfolded and each person is given a hat to wear such that when their blindfold is removed they can't see their own hat. All the blindfolds are then removed, so all the players can see each other. Iris says, 'I don't know what color hat I'm wearing.'. Jana then says, 'I don't know what color hat I'm wearing.' What color hat is Karim wearing? (G-Green, P-Pink)"
+    question_id: 72
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "Euler's totient function is defined as the number of positive integers not exceeding n which are coprime with n. What is the value of the totient function of 77?"
+    question_id: 73
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "Scientists are testing a medical treatment. They are checking if the treatment is effective (Works) and if it has no side effects (No SE). What is the probability that the treatment works or has no side effects?]. Results = [Works, No SE, Works and No SE], Probability	= [0.6, 0.3, 0.2]"
+    question_id: 74
+    answer: ""
+    room: "C"
+    answered: false
+  - question: "Exactly one of these chests contains gold, but only one of the four statements is true. Which chest must contain the gold? (Answer the Capital Letter corresponding to the chest). A - The gold is in here, B - The gold is in chest A or D, C - The gold is not in this chest, D - The gold is here."
+    question_id: 75
+    answer: ""
+    room: "D"
+    answered: false
+  - question: "Suppose the alternating pattern below continues for 998 sentences before ending with one unique sentence. 1) The next sentence is true. 2) The next sentence is false. 3) The next sentence is true. 4) The next sentence is false. ….997) The next sentence is true. 998) The next sentence is false. 999) Y≥5. What is the validity of line 999? (T=true, F=false)"
+    question_id: 76
+    answer: ""
+    room: "A"
+    answered: false
+  - question: "What is the maximum number of pieces you can divide a circular pizza into with 4 cuts? All cuts must be distinct straight lines from one point on the edge of the pizza to another point on the edge of the pizza, and you may not move the pizza slices."
+    question_id: 77
+    answer: ""
+    room: "B"
+    answered: false
+  - question: "y=|||x-10|+10|-10|+10. What is the smallest possible value of y?"
+    question_id: 78
+    answer: ""
+    room: "C"
+    answered: false

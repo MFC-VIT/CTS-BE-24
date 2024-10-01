@@ -13,7 +13,8 @@ COPY . .
 COPY internal/files/questions.yaml internal/files/
 COPY internal/files/answer.yaml internal/files/
 COPY internal/files/location.yaml internal/files/
-
+COPY internal/seeders/questions.yaml internal/seeders/
+COPY internal/seeders/answer.yaml internal/seeders/
 # Build the Go binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/api/main.go
 
@@ -28,7 +29,8 @@ COPY --from=builder /CTS-BE-24/main .
 COPY --from=builder /CTS-BE-24/internal/files/questions.yaml /root/internal/files/
 COPY --from=builder /CTS-BE-24/internal/files/answer.yaml /root/internal/files/
 COPY --from=builder /CTS-BE-24/internal/files/location.yaml /root/internal/files/
-
+COPY --from=builder /CTS-BE-24/internal/seeders/questions.yaml /root/internal/seeders/
+COPY --from=builder /CTS-BE-24/internal/seeders/answer.yaml /root/internal/seeders/
 # Copy the .env file to the production image
 COPY --from=builder /CTS-BE-24/.env .env
 

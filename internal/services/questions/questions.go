@@ -85,13 +85,13 @@ func (qs *QuestionControllerStore) GetNextQuestion(ctx context.Context, userID p
 
 		switch user.RoomEntered {
 		case "A":
-			return models.Question{}, fmt.Errorf("clue: A")
+			return models.Question{}, fmt.Errorf("clue: del")
 		case "B":
-			return models.Question{}, fmt.Errorf("clue: B")
+			return models.Question{}, fmt.Errorf("clue: apto")
 		case "C":
-			return models.Question{}, fmt.Errorf("clue: C")
+			return models.Question{}, fmt.Errorf("clue: mas")
 		case "D":
-			return models.Question{}, fmt.Errorf("clue: D")
+			return models.Question{}, fmt.Errorf("clue: supervivencia")
 		}
 	}
 
