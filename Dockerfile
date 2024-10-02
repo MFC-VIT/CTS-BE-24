@@ -39,12 +39,12 @@ RUN chmod +x /root/main
 
 # Set environment variables
 ENV PORT=8000
-ENV MONGO_URI="mongodb+srv://ishaanagarwal2022:Hg2KRVCQL711ohfD@cluster0.xbrih.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+ENV MONGO_URI="your-mongo-uri"
 ENV MONGO_DBNAME=C2S
 ENV MONGO_USER_COLLECTION="User"
 ENV MONGO_QUESTIONS_COLLECTION="Questions"
 ENV MONGO_ROOMS_COLLECTION="Rooms"
-ENV JWTSECRET="Ishaan"
+ENV JWTSECRET="secret"
 ENV JWTEXPINSEC=604800
 
 # Expose port
