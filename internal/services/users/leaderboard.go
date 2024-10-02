@@ -12,8 +12,7 @@ import (
 
 func (r *Store) GetLeaderBoardHandler(c *fiber.Ctx) error {
 	pipeline := mongo.Pipeline{
-		{{Key: "$sort", Value: bson.D{{Key: "score", Value: -1}}}}, 
-		{{Key: "$limit", Value: 10}},                               
+		{{Key: "$sort", Value: bson.D{{Key: "score", Value: -1}}}},                               
 	}
 
 	cursor, err := r.usersCollection.Aggregate(c.Context(), pipeline)

@@ -41,7 +41,7 @@ func (h *Handler) HandleLogin(c *fiber.Ctx) error{
 	if !auth.Comparepasswords(u.Password,[]byte(user.Password)){
 		return utils.WriteError(c,fiber.StatusBadRequest,fmt.Errorf("invalid username or password: %v", err))
 	}
-	secret := []byte(os.Getenv("JWTSecret"))
+	secret := []byte(os.Getenv("JWTSECRET"))
 	userIDString := u.ID.Hex()
 	token, err := middleware.CreateJWT(secret, userIDString)
 	if err != nil {

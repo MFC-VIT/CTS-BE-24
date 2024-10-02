@@ -239,6 +239,16 @@ func (s* Store) UpdateScore(c *fiber.Ctx) error{
 	return c.Status(200).SendString("User updated")
 }
 func (s *Store) GetRandomLocation(ctx context.Context, userID primitive.ObjectID, locationsFilePath string) (string, error) {
+
+	user, err := s.GetUserByID(userID)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch user: %v", err)
+	}
+	if user.Location != "" {
+		return user.Location, nil
+	}
+
+
 	roomStatusArray, err := s.collectUserRoomsStatus(ctx, userID) 
 	if err != nil {
 		return "", fmt.Errorf("failed to collect user rooms status: %v", err)
@@ -334,7 +344,7 @@ func (s *Store) GetUserRoomStatus(ctx context.Context, userID primitive.ObjectID
 		},
 		{
 			{Key: "$lookup", Value: bson.D{
-				{Key: "from", Value: "rooms"}, 
+				{Key: "from", Value: "Rooms"}, 
 				{Key: "localField", Value: "_id"}, 
 				{Key: "foreignField", Value: "user_id"}, 
 				{Key: "as", Value: "room_details"}, 
