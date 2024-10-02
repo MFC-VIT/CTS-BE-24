@@ -35,7 +35,7 @@ width="32" height="32" alt="LinkedIn" />
 </td>
 <td style="border: 2px solid grey; width: 170px; height: 170px" >
 <a href="https://github.com/i-shaan"><p align="center">
-<img src="https://avatars.githubusercontent.com/u/119158790?v=4" width="160" height="160" alt="Ishaan"
+<img src="https://avatars.githubusercontent.com/u/127313769?v=4" width="160" height="160" alt="Ishaan"
 style="border: 2px solid grey; width: 160px; height: 160px" />
 </p>
 <p style="font-size: 16px; font-weight: 600">Ishaan</p>
@@ -51,7 +51,7 @@ width="32" height="32" alt="LinkedIn" />
 </td>
 <td style="border: 2px solid grey; width: 170px; height: 180px" >
 <a href="https://github.com/ABHINAVGARG05"><p align="center">
-<img src="https://avatars.githubusercontent.com/u/115440143?v=4" width="160" height="160" alt="
+<img src="https://avatars.githubusercontent.com/u/143117260?v=4" width="160" height="160" alt="
 Vinayak Raina"
 style="border: 2px solid grey; width: 160px; height: 160px" />
 </p>
